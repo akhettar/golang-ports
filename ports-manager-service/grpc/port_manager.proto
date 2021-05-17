@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+option go_package = "port-parser-service/grpc";
+
+// The PortManager service
+service PortManager {
+  // Sends a greeting
+  rpc AddPort (PortRequest) returns (PortResponse) {}
+  rpc GetPort (PortCode) returns (Port);
+
+}
+
+// The request message containing the port's details
+message PortRequest {
+  string portCode = 1;
+  string city = 2;
+  double longitude = 3;
+  double latitude = 4;
+  string province = 5;
+  string timezone = 6;
+  string code = 7;
+  string country = 8;
+  string name = 9;
+}
+
+message PortCode {
+  string code = 1;
+}
+
+message Port {
+  string portCode = 2;
+  string city = 3;
+  double longitude = 4;
+  double latitude = 5;
+  string province = 6;
+  string timezone = 7;
+  string code = 8;
+  string country = 9;
+  string name = 10;
+}
+
+// The response message containing the write success
+message PortResponse {
+  string message = 1;
+  string error = 2;
+}
