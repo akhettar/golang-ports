@@ -36,5 +36,10 @@ func ToPortResponse(p *pp.Port) Port {
 }
 
 func ToPbRequest(p Port) *pp.PortRequest {
-	return &pp.PortRequest{PortCode: p.PortCode, City: p.City, Longitude: p.Coordinates[0], Latitude: p.Coordinates[1], Province: p.Province, Timezone: p.Timezone, Code: p.Code, Country: p.Country, Name: p.Name}
+	var longtitude, latitude float64
+	if len(p.Coordinates) > 0 {
+		longtitude = p.Coordinates[0]
+		latitude = p.Coordinates[1]
+	}
+	return &pp.PortRequest{PortCode: p.PortCode, City: p.City, Longitude: longtitude, Latitude: latitude, Province: p.Province, Timezone: p.Timezone, Code: p.Code, Country: p.Country, Name: p.Name}
 }

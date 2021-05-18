@@ -23,12 +23,15 @@ func NewServer() *PortServer {
 	return &PortServer{repo}
 }
 
+// AddPort persists port in the data store
 func (ps *PortServer) AddPort(ctx context.Context, req *pb.PortRequest) (*pb.PortResponse, error) {
 	if err := ps.Repository.AddPort(m.ToPort(req)); err != nil {
 		return nil, status.Errorf(codes.Unimplemented, err.Error())
 	}
 	return &pb.PortResponse{Message: fmt.Sprintf("Port with code: %s successfully added", req.PortCode)}, nil
 }
+
+// GetPort gets port for a given code
 func (ps *PortServer) GetPort(ctx context.Context, req *pb.PortCode) (*pb.Port, error) {
 	found, err := ps.Repository.GetPort(req.Code)
 

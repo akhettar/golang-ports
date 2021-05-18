@@ -1,23 +1,23 @@
-version: "3"
+version: "3.8"
 services:
   ports-parser:
     build: ports-parser-service
     environment:
-      PORT_MANAGER_ADDR: ports-manager:10000
+      PORT_MANAGER_ADDR: manager:10000
     depends_on: 
-      - ports-manager
+      - manager
     ports:  
       - "8080:8080"
-    links: 
-      - ports-manager
-    networks: 
-      - backend            
-  ports-manager:
+    networks:  
+      - microservices
+  manager:
     build: ports-manager-service
     ports: 
-      - "10000:10000"  
-      
-networks:
-  backend:
-    driver: "bridge"     
+      - "10000:10000"
+    networks: 
+      - microservices     
+networks: 
+    microservices:       
+     
+     
     

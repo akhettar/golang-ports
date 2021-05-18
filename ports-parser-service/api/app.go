@@ -48,7 +48,7 @@ func (ps *PortParserService) Run(addr string) {
 
 // AddPorts send the add port request to Ports Writer Service
 func (srv *PortParserService) AddPorts(w http.ResponseWriter, req *http.Request) {
-	log.Println("received request to add port")
+	log.Println("received request to process ports")
 	var pr m.ProcessPortsRequest
 	if err := json.NewDecoder(req.Body).Decode(&pr); err != nil {
 		returnError(w, http.StatusBadRequest, "Inavlid payload")
@@ -94,6 +94,7 @@ func (srv *PortParserService) AddPorts(w http.ResponseWriter, req *http.Request)
 		defer cancel()
 
 		// send add port request to the port manager
+		log.Printf("sendnig port with code %s to port manager\n", p.PortCode)
 		r, err := srv.PortService.Add(ctx, m.ToPbRequest(p))
 
 		if err != nil {
