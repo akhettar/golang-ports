@@ -29,9 +29,9 @@ func NewPortParserService(addr string) *PortParserService {
 	return ps
 }
 
-func (srv *PortParserService) routes() {
-	srv.router.HandleFunc("/ports", srv.AddPorts).Methods("POST")
-	srv.router.HandleFunc("/ports/{code}", srv.GetPort).Methods("GET")
+func (ps *PortParserService) routes() {
+	ps.router.HandleFunc("/ports", ps.AddPorts).Methods("POST")
+	ps.router.HandleFunc("/ports/{code}", ps.GetPort).Methods("GET")
 }
 
 // Run the application
@@ -47,7 +47,7 @@ func (ps *PortParserService) Run(addr string) {
 }
 
 // AddPorts send the add port request to Ports Writer Service
-func (srv *PortParserService) AddPorts(w http.ResponseWriter, req *http.Request) {
+func (ps *PortParserService) AddPorts(w http.ResponseWriter, req *http.Request) {
 	log.Println("received request to process ports")
 	var pr m.ProcessPortsRequest
 	if err := json.NewDecoder(req.Body).Decode(&pr); err != nil {
@@ -95,7 +95,7 @@ func (srv *PortParserService) AddPorts(w http.ResponseWriter, req *http.Request)
 
 		// send add port request to the port manager
 		log.Printf("sendnig port with code %s to port manager\n", p.PortCode)
-		r, err := srv.PortService.Add(ctx, m.ToPbRequest(p))
+		r, err := ps.PortService.Add(ctx, m.ToPbRequest(p))
 
 		if err != nil {
 			log.Printf("could not add port: %v", err)
@@ -112,7 +112,7 @@ func (srv *PortParserService) AddPorts(w http.ResponseWriter, req *http.Request)
 }
 
 // GetPort fetches the port details for given code
-func (srv *PortParserService) GetPort(w http.ResponseWriter, req *http.Request) {
+func (ps *PortParserService) GetPort(w http.ResponseWriter, req *http.Request) {
 
 	code := mux.Vars(req)["code"]
 	log.Printf("received request to fetch port by code: %s", code)
@@ -121,7 +121,7 @@ func (srv *PortParserService) GetPort(w http.ResponseWriter, req *http.Request) 
 	defer cancel()
 
 	// fire add port request
-	r, err := srv.PortService.Get(ctx, &pb.PortCode{Code: code})
+	r, err := ps.PortService.Get(ctx, &pb.PortCode{Code: code})
 
 	if err != nil {
 		returnError(w, http.StatusNotFound, fmt.Sprintf("Port with code %s not found", code))

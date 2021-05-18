@@ -9,15 +9,18 @@ import (
 	"google.golang.org/grpc"
 )
 
+// PortService type
 type PortService interface {
 	Add(context.Context, *gc.PortRequest) (*gc.PortResponse, error)
 	Get(context.Context, *gc.PortCode) (*gc.Port, error)
 }
 
+// PortManager type
 type PortManager struct {
 	Addr string
 }
 
+// NewPortService creates an instance of the PortService
 func NewPortService(addr string) PortService {
 	if addr == "" {
 		addr = "localhost:10000"
@@ -25,6 +28,7 @@ func NewPortService(addr string) PortService {
 	return &PortManager{Addr: addr}
 }
 
+// Add port
 func (pm *PortManager) Add(ctx context.Context, req *gc.PortRequest) (*gc.PortResponse, error) {
 
 	// Attempt to create a connection to the Port Manager Server
@@ -45,6 +49,7 @@ func (pm *PortManager) Add(ctx context.Context, req *gc.PortRequest) (*gc.PortRe
 
 }
 
+// Get port
 func (pm *PortManager) Get(ctx context.Context, code *gc.PortCode) (*gc.Port, error) {
 
 	// Attempt to create a connection to the Port Manager Server

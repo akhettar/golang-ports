@@ -25,16 +25,19 @@ type ProcessPortsRequest struct {
 	Size int    `json:"size`
 }
 
+// ProcessPortsResponse type
 type ProcessPortsResponse struct {
 	File            string `json:"file"`
 	NumberOfRecords int    `json:"number_of_records"`
 }
 
+// ToPortResponse converts from gRPC model to REST client facing type
 func ToPortResponse(p *pp.Port) Port {
 	return Port{City: p.City, Country: p.Country,
 		Name: p.Name, Coordinates: []float64{p.Longitude, p.Latitude}, Timezone: p.Timezone, Province: p.Province, PortCode: p.PortCode, Code: p.Code}
 }
 
+// ToPbRequest convets from REST client Request to gRPC request
 func ToPbRequest(p Port) *pp.PortRequest {
 	var longtitude, latitude float64
 	if len(p.Coordinates) > 0 {
