@@ -1,7 +1,7 @@
 package repository
 
 import (
-	m "ports-writer-service/model"
+	m "ports-manager-service/model"
 	"reflect"
 	"testing"
 )
@@ -21,7 +21,7 @@ func TestInMemoryRepository_AddPort(t *testing.T) {
 		t.Errorf("error should not have been returned")
 	}
 
-	if !reflect.DeepEqual(given, got) {
+	if !reflect.DeepEqual(&given, got) {
 		t.Errorf("InMemoryRepository.AddPort() got = %v, want %v", got, given)
 	}
 }

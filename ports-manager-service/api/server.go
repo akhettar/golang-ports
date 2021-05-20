@@ -15,12 +15,12 @@ import (
 // PortServer type
 type PortServer struct {
 	repo.Repository
+	*pb.UnimplementedPortManagerServer
 }
 
 // NewServer creates an instance of the PortServer
 func NewServer() *PortServer {
-	repo := repo.NewInMemoryRepository()
-	return &PortServer{repo}
+	return &PortServer{repo.NewInMemoryRepository(), nil}
 }
 
 // AddPort persists port in the data store

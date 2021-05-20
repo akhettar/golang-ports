@@ -7,13 +7,13 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
-
-	"github.com/gorilla/mux"
-
+	"os/signal"
 	pb "ports-parser-service/grpc"
 	m "ports-parser-service/model"
 	"ports-parser-service/services"
+	"time"
+
+	"github.com/gorilla/mux"
 )
 
 // PortParserService type
@@ -43,7 +43,30 @@ func (ps *PortParserService) Run(addr string) {
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
-	log.Fatal(srv.ListenAndServe())
+
+	// Run our server in a goroutine so that it doesn't block.
+	go func() {
+		if err := srv.ListenAndServe(); err != nil {
+			log.Println(err)
+		}
+	}()
+
+	c := make(chan os.Signal, 1)
+	// We'll accept graceful shutdowns when quit via SIGINT (Ctrl+C)
+	// SIGKILL, SIGQUIT or SIGTERM (Ctrl+/) will not be caught.
+	signal.Notify(c, os.Interrupt)
+
+	// Block until we receive our signal.
+	<-c
+
+	// Create a deadline to wait for 15 seconds
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	srv.Shutdown(ctx)
+	// to finalize based on context cancellation.
+	log.Println("shutting down the ports-parser-service")
+	os.Exit(0)
 }
 
 // AddPorts send the add port request to Ports Writer Service
@@ -70,6 +93,9 @@ func (ps *PortParserService) AddPorts(w http.ResponseWriter, req *http.Request) 
 	if err != nil {
 		log.Fatal(err)
 	}
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	counter := 0
 	for {
 		t, err := dec.Token()
@@ -89,9 +115,6 @@ func (ps *PortParserService) AddPorts(w http.ResponseWriter, req *http.Request) 
 			log.Printf("failed to deserialise Port with code %s", p.PortCode)
 			continue
 		}
-
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-		defer cancel()
 
 		// send add port request to the port manager
 		log.Printf("sendnig port with code %s to port manager\n", p.PortCode)

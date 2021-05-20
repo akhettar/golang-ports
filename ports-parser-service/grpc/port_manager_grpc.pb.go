@@ -135,5 +135,5 @@ var PortManager_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "port_manager.proto",
+	Metadata: "grpc/port_manager.proto",
 }

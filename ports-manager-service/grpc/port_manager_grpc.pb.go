@@ -56,6 +56,7 @@ type PortManagerServer interface {
 	// Sends a greeting
 	AddPort(context.Context, *PortRequest) (*PortResponse, error)
 	GetPort(context.Context, *PortCode) (*Port, error)
+	mustEmbedUnimplementedPortManagerServer()
 }
 
 // UnimplementedPortManagerServer must be embedded to have forward compatible implementations.
@@ -134,5 +135,5 @@ var PortManager_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "port_manager.proto",
+	Metadata: "grpc/port_manager.proto",
 }

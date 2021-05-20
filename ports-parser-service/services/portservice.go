@@ -2,11 +2,9 @@ package services
 
 import (
 	"context"
-	"log"
-
-	gc "ports-parser-service/grpc"
-
 	"google.golang.org/grpc"
+	"log"
+	gc "ports-parser-service/grpc"
 )
 
 // PortService type

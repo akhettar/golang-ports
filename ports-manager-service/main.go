@@ -26,5 +26,5 @@ func main() {
 	pb.RegisterPortManagerServer(grpcServer, api.NewServer())
 
 	log.Printf("running server on port %d", *port)
-	grpcServer.Serve(lis)
+	log.Fatal(grpcServer.Serve(lis))
 }
