@@ -7,6 +7,7 @@ import (
 	"net"
 	"ports-manager-service/api"
 	pb "ports-manager-service/grpc"
+	repository "ports-manager-service/repo"
 
 	"google.golang.org/grpc"
 )
@@ -23,7 +24,7 @@ func main() {
 	}
 	var opts []grpc.ServerOption
 	grpcServer := grpc.NewServer(opts...)
-	pb.RegisterPortManagerServer(grpcServer, api.NewServer())
+	pb.RegisterPortManagerServer(grpcServer, api.NewServer(repository.NewInMemoryRepository()))
 
 	log.Printf("running server on port %d", *port)
 	log.Fatal(grpcServer.Serve(lis))

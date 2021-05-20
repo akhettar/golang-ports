@@ -19,8 +19,8 @@ type PortServer struct {
 }
 
 // NewServer creates an instance of the PortServer
-func NewServer() *PortServer {
-	return &PortServer{repo.NewInMemoryRepository(), nil}
+func NewServer(repo repo.Repository) *PortServer {
+	return &PortServer{repo, nil}
 }
 
 // AddPort persists port in the data store
