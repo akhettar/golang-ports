@@ -9,5 +9,9 @@ This is a gRPC service that accepts call to persist Port details in a content st
 go build && ./ports-manager-service
 ```
 
-Alternatively, you can use [docker-compose](../docker-compose.yml)
+2. simply run: `make` this will generate protobuf files, build, lint, test and run the server
+
+You can run this service and port manager service with [docker-compose](../docker-compose.yml)
+
+
 

@@ -11,8 +11,14 @@ This service has a dependency on [ports-manager-service](../ports-manager-servic
 
 2. Build and run
 ```
-go build && ./ports-parser-service
+go build && ./ports-parser-service 
+
 ```
+or simply run 
+```
+make 
+```
+This will generate protobuf files, build, lint, test and run the server
 
 3. Send Request
 Rquest:
@@ -27,5 +33,5 @@ Response:
 {"file":"ports_small.json","number_of_records":7}
 ```
 
-Alternatively, you can use [docker-compose](../docker-compose.yml)
+You can use [docker-compose](../docker-compose.yml) to run both 
 

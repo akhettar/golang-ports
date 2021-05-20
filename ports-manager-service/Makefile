@@ -1,4 +1,4 @@
-all: generate_protobuf build test
+all: generate_protobuf build test run
 
 generate_protobuf:
 	go install google.golang.org/protobuf/cmd/protoc-gen-go
